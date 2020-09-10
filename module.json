@@ -8,5 +8,6 @@
   "compatibleCoreVersion": "0.6.6",
   "scripts": ["scripts/index.js"],
   "url": "https://github.com/jsabol/all-goblins-have-names",
-  "readme": "README.md"
+  "readme": "README.md",
+  "license": "LICENSE"
 }
