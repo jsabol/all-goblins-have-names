@@ -9,5 +9,6 @@
   "scripts": ["scripts/index.js"],
   "url": "https://github.com/jsabol/all-goblins-have-names",
   "readme": "README.md",
-  "license": "LICENSE"
+  "license": "LICENSE",
+  "download": "https://github.com/jsabol/all-goblins-have-names/releases/download/v1.0.0/all-goblins-have-names.zip"
 }

@@ -10,6 +10,12 @@ text that looks similar to `@RollTable[2cbm3cP46dxcxO5Z]{Dwarf Female Name}`. No
 and click Prototype Token. Paste your `@RollTable[...` text into the Token Name. When you drag your Actor
 onto the map to create a new Token, its name will be randomized!
 
+## Installation
+
+### Manifest URL
+
+https://raw.githubusercontent.com/jsabol/all-goblins-have-names/master/module.json
+
 ## Get help
 
 You can [file an issue](https://github.com/jsabol/all-goblins-have-names/issues/new) on github if
