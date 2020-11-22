@@ -18,9 +18,7 @@ When multiple lines are returned from a table, the lines will be joined together
 
 ## Installation
 
-### Manifest URL
-
-https://raw.githubusercontent.com/jsabol/all-goblins-have-names/master/module.json
+You can install this module through the Foundry module UI
 
 ## Get help
 
