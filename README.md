@@ -10,6 +10,12 @@ text that looks similar to `@RollTable[2cbm3cP46dxcxO5Z]{Dwarf Female Name}`. No
 and click Prototype Token. Paste your `@RollTable[...` text into the Token Name. When you drag your Actor
 onto the map to create a new Token, its name will be randomized!
 
+### Return more than one result for firstname + lastname
+
+When multiple lines are returned from a table, the lines will be joined together with a space. For example, you could have a roll table formula of 1d1, and have two results which are also tables for a firstname and a lastname, both with range 1-1.
+
+![A RollTable that returns multiple lines on the same dice roll, for firstname and lastname](./example.png)
+
 ## Installation
 
 ### Manifest URL

@@ -3,12 +3,12 @@
   "title": "All Goblins Have Names",
   "description": "Use a table as the display name for a token. New tokens get a random name.",
   "author": "Cattegy",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "minimumCoreVersion": "0.6.0",
-  "compatibleCoreVersion": "0.6.6",
+  "compatibleCoreVersion": "0.7.7",
   "scripts": ["scripts/index.js"],
   "url": "https://github.com/jsabol/all-goblins-have-names",
   "readme": "README.md",
   "license": "LICENSE",
-  "download": "https://github.com/jsabol/all-goblins-have-names/archive/v1.0.0.zip"
+  "download": "https://github.com/jsabol/all-goblins-have-names/archive/v1.0.1.zip"
 }
