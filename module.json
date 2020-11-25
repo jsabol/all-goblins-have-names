@@ -10,5 +10,6 @@
   "url": "https://github.com/jsabol/all-goblins-have-names",
   "readme": "README.md",
   "license": "LICENSE",
-  "download": "https://github.com/jsabol/all-goblins-have-names/archive/v1.1.0.zip"
+  "download": "https://github.com/jsabol/all-goblins-have-names/archive/v1.1.0.zip",
+  "manifest": "https://raw.githubusercontent.com/jsabol/all-goblins-have-names/master/module.json"
 }
