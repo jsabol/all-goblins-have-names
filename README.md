@@ -1,7 +1,7 @@
 # All Goblins Have Names
 
 A module for Foundry VTT. Allows you to use a table as the Display Name for a token so each new
-token will get a random name.
+token will get a random name. It can also roll random biographies for tokens when used with [Better Rolltables](https://foundryvtt.com/packages/better-rolltables/).
 
 ## How to use it
 
@@ -15,6 +15,15 @@ onto the map to create a new Token, its name will be randomized!
 When multiple lines are returned from a table, the lines will be joined together with a space. For example, you could have a roll table formula of 1d1, and have two results which are also tables for a firstname and a lastname, both with range 1-1.
 
 ![A RollTable that returns multiple lines on the same dice roll, for firstname and lastname](./example.png)
+
+## Random biographies with Better Rolltables
+
+If you install the module [Better Rolltables](https://foundryvtt.com/packages/better-rolltables/), you can also generate random biographies. Create a Story Table, then place a reference to it as the first line of the biography. For example, you can use the Random NPC Story Table that comes with the BetterTables mod: `@Compendium[better-rolltables.brt-story.8vjHa6SoZibxeTke]{Random NPC}`. This currently supports the Simple Worldbuilding system, D&D 5e, or any system with the data formats of...
+
+- `actor.data.data.biography` (Simple Worldbuilding)
+- `actor.data.data.details.biography.value` (D&D 5e)
+
+Note: This will only work for tokens with "Link Actor Data" unchecked.
 
 ## Installation
 

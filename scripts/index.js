@@ -1,30 +1,13 @@
-function isBetterTable(table) {
-  return (
-    table.data.flags &&
-    table.data.flags["better-rolltables"] &&
-    table.data.flags["better-rolltables"]["table-type"] == "better"
-  );
-}
+import { isWorldTable, isCompendiumTable, rollTable } from "./table-utils.js";
 
-async function rollTable(table) {
-  if (isBetterTable(table)) {
-    return await rollBetterTable(table);
-  } else {
-    return table.roll().results;
-  }
-}
-
-async function rollBetterTable(table) {
-  const result = await game.betterTables.getBetterTableResults(table);
-  return result;
-}
-
-/**
- * Joins the results of a table roll together with spaces
- * @param {Array.<object>} results
- */
-function joinResults(results) {
-  return results.map((r) => r.text).join(" ");
+function accessNestedRef(obj = {}, str = "", setValue) {
+  const parts = str.split(".");
+  return parts.reduce((o, key, i) => {
+    if (setValue && i == parts.length - 1) {
+      o[key] = setValue;
+    }
+    return o[key];
+  }, obj);
 }
 
 /**
@@ -91,38 +74,91 @@ async function getCompendiumTableResult(displayName) {
  * Initialize the All Goblins Have NAmes module
  */
 Hooks.on("ready", () => {
+  // check for relevant tables before the token is actually created
   Hooks.on("preCreateToken", (scene, tokenData) => {
     const displayName = tokenData.name.trim();
-    const isWorldTable = displayName.startsWith("@RollTable[");
-    const isCompendiumTable = displayName.startsWith("@Compendium[");
-    if (isWorldTable || isCompendiumTable) {
+    if (isWorldTable(displayName) || isCompendiumTable(displayName)) {
       // clear token name so we don't display software gore to the user
       tokenData.name = " ";
       // temporarily put it here so we can access it in our async function
-      tokenData.flags._nameTable = displayName;
+      tokenData.flags._AGHN_nameTable = displayName;
     }
-  });
-  Hooks.on("createToken", async (scene, tokenData) => {
-    const tableStr = tokenData.flags._nameTable;
-    if (!tableStr) {
-      return;
-    }
-    // clean up our temporary storage
-    delete tokenData.flags._nameTable;
+    // Mine biography for tables
+    if (!tokenData.actorLink && tokenData.actorId) {
+      let actor = game.actors.get(tokenData.actorId);
+      let data = actor.data.data;
 
-    try {
-      let resultPromise = tableStr.startsWith("@RollTable[")
-        ? getRollTableResult(tableStr)
-        : getCompendiumTableResult(tableStr);
-
-      const token = canvas.tokens.get(tokenData._id);
-      if (!token) {
-        throw new Error("Couldn't find token to update.");
+      let bio;
+      // structure of simple worldbuilding system
+      if (data.biography) {
+        bio = data.biography;
+        tokenData.flags._AGHN_bioDataPath = "data.biography";
+      }
+      // structure of D&D 5e NPCs and PCs
+      else if (
+        data.details &&
+        data.details.biography &&
+        data.details.biography.value
+      ) {
+        bio = data.details.biography.value;
+        tokenData.flags._AGHN_bioDataPath = "data.details.biography.value";
       }
 
-      resultPromise.then((result) => {
-        token.update({ name: joinResults(result) });
-      });
+      // get text out of bio
+      let el = document.createElement("div");
+      el.innerHTML = bio;
+      let bioText = el.innerText.trim();
+      if (isWorldTable(bioText) || isCompendiumTable(bioText)) {
+        tokenData.flags._AGHN_bioTable = bioText;
+      }
+    }
+  });
+
+  // Creating the token
+  Hooks.on("createToken", async (scene, tokenData) => {
+    // pick up the temporary flags we set in preCreateToken
+    const tableStr = tokenData.flags._AGHN_nameTable;
+    const bioTableStr = tokenData.flags._AGHN_bioTable;
+    const bioDataPath = tokenData.flags._AGHN_bioDataPath;
+    // bail early if there is nothing relevant here
+    if (!tableStr && !bioTableStr) return;
+    // clean up our temporary storage
+    delete tokenData.flags._AGHN_nameTable;
+    delete tokenData.flags._AGHN_bioTable;
+    delete tokenData.flags._AGHN_bioDataPath;
+
+    try {
+      // name
+      if (tableStr) {
+        let resultPromise = isWorldTable(tableStr)
+          ? getRollTableResult(tableStr)
+          : getCompendiumTableResult(tableStr);
+
+        const token = canvas.tokens.get(tokenData._id);
+        if (!token) {
+          throw new Error("Couldn't find token to update.");
+        }
+
+        resultPromise.then((result) => {
+          token.update({ name: result });
+        });
+      }
+
+      // bio
+      if (bioTableStr) {
+        let resultPromise = isWorldTable(bioTableStr)
+          ? getRollTableResult(bioTableStr)
+          : getCompendiumTableResult(bioTableStr);
+
+        const token = canvas.tokens.get(tokenData._id);
+        if (!token) {
+          throw new Error("Couldn't find token to update.");
+        }
+
+        resultPromise.then((result) => {
+          accessNestedRef(token.actor.data, bioDataPath, result);
+        });
+      }
     } catch (e) {
       console.warn("[All Goblins Have Names]: " + e.message);
     }
