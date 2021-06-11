@@ -19,7 +19,8 @@ export async function rollTable(table) {
   } else if (isStoryTable(table)) {
     return await rollStoryTable(table);
   } else {
-    return joinResults(table.roll().results);
+    let results = await table.roll();
+    return joinResults(results['results']);
   }
 }
 
@@ -28,5 +29,5 @@ export async function rollTable(table) {
  * @param {Array.<object>} results
  */
 function joinResults(results) {
-  return results.map((r) => r.text).join(" ");
+  return results.map((r) => r.data.text).join(" ");
 }
