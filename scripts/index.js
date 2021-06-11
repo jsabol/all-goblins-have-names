@@ -137,7 +137,8 @@ Hooks.on("ready", () => {
           : getCompendiumTableResult(tableStr);
 
         resultPromise.then((result) => {
-          token.update({ name: result });
+          // token.update will be deprecated in 0.9.
+          tokenDocument.update({ name: result });
         });
       }
 
