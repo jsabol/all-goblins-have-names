@@ -18,7 +18,7 @@ When multiple lines are returned from a table, the lines will be joined together
 
 ## Random biographies with Better Rolltables
 
-If you install the module [Better Rolltables](https://foundryvtt.com/packages/better-rolltables/), you can also generate random biographies. Create a Story Table, then place a reference to it as the first line of the biography. For example, you can use the Random NPC Story Table that comes with the BetterTables mod: `@Compendium[better-rolltables.brt-story.8vjHa6SoZibxeTke]{Random NPC}`. This currently supports the Simple Worldbuilding system, D&D 5e, or any system with the data formats of...
+If you install the module [Better Rolltables](https://foundryvtt.com/packages/better-rolltables/), you can also generate random biographies. Create a Story Table, then place a reference to it as the first line of the biography. For example, you can use the Random NPC Story Table that comes with the BetterTables mod: `@Compendium[better-rolltables.brt-story.8vjHa6SoZibxeTke]{Random NPC}`. This currently supports the Simple Worldbuilding system, D&D 5e, HarnMaster, or any system with the data formats of...
 
 - `actor.data.data.biography` (Simple Worldbuilding)
 - `actor.data.data.details.biography.value` (D&D 5e)
@@ -31,5 +31,5 @@ You can install this module through the Foundry module UI
 
 ## Get help
 
-You can [file an issue](https://github.com/jsabol/all-goblins-have-names/issues/new) on github if
-you're running into a bug or reach me on the Foundry VTT discord as Cattegy#7436.
+You can [file an issue](https://github.com/toastygm/all-goblins-have-names/issues/new) on github if
+you're running into a bug or reach me on the Foundry VTT discord as toasty#8538.
