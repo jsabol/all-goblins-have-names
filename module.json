@@ -2,14 +2,26 @@
   "name": "all-goblins-have-names",
   "title": "All Goblins Have Names",
   "description": "Use a table as the display name for a token. New tokens get a random name.",
-  "author": "Cattegy",
-  "version": "1.2.0",
-  "minimumCoreVersion": "0.6.0",
-  "compatibleCoreVersion": "0.7.7",
+  "authors": [
+    {
+      "name": "Tom Rodriguez",
+      "discord": "toasty#8538"
+    },
+    {
+      "name": "Cattegy"
+    }
+  ],
+  "version": "1.3.0",
+  "minimumCoreVersion": "0.8.5",
+  "compatibleCoreVersion": "0.8.9",
   "esmodules": ["scripts/index.js"],
-  "url": "https://github.com/jsabol/all-goblins-have-names",
+  "url": "https://github.com/toastygm/all-goblins-have-names",
   "readme": "README.md",
   "license": "LICENSE",
-  "download": "https://github.com/jsabol/all-goblins-have-names/archive/v1.2.0.zip",
-  "manifest": "https://raw.githubusercontent.com/jsabol/all-goblins-have-names/master/module.json"
+  "bugs": "https://github.com/toastygm/all-goblins-have-names/issues",
+  "download": "https://github.com/toastygm/all-goblins-have-names/archive/v1.3.0.zip",
+  "manifest": "https://raw.githubusercontent.com/toastygm/all-goblins-have-names/master/module.json",
+  "flags": {
+    "allowBugReporter": true
+  }
 }
