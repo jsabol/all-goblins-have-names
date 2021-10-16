@@ -19,7 +19,7 @@ async function getRollTableResult(displayName) {
   // get the table by its ID
   const endIndex = displayName.indexOf("]");
   const table_id = displayName.substring(11, endIndex);
-  const table = game.tables.entities.find((t) => t._id === table_id);
+  const table = game.tables.contents.find((t) => t.data._id == table_id);
 
   if (table) {
     return await rollTable(table);
@@ -74,8 +74,7 @@ async function getCompendiumTableResult(displayName) {
  * Initialize the All Goblins Have NAmes module
  */
 Hooks.on("ready", () => {
-  // check for relevant tables before the token is actually created
-  Hooks.on("preCreateToken", (scene, tokenData) => {
+  function prepareTokenFlags(tokenData) {
     const displayName = tokenData.name.trim();
     if (isWorldTable(displayName) || isCompendiumTable(displayName)) {
       // clear token name so we don't display software gore to the user
@@ -112,11 +111,14 @@ Hooks.on("ready", () => {
         tokenData.flags._AGHN_bioTable = bioText;
       }
     }
-  });
+  }
 
   // Creating the token
-  Hooks.on("createToken", async (scene, tokenData) => {
+  Hooks.on("createToken", async (tokenDocument, scene) => {
     // pick up the temporary flags we set in preCreateToken
+    const tokenData = tokenDocument.data
+    prepareTokenFlags(tokenData)
+
     const tableStr = tokenData.flags._AGHN_nameTable;
     const bioTableStr = tokenData.flags._AGHN_bioTable;
     const bioDataPath = tokenData.flags._AGHN_bioDataPath;
@@ -134,13 +136,9 @@ Hooks.on("ready", () => {
           ? getRollTableResult(tableStr)
           : getCompendiumTableResult(tableStr);
 
-        const token = canvas.tokens.get(tokenData._id);
-        if (!token) {
-          throw new Error("Couldn't find token to update.");
-        }
-
         resultPromise.then((result) => {
-          token.update({ name: result });
+          // token.update will be deprecated in 0.9.
+          tokenDocument.update({ name: result });
         });
       }
 
@@ -150,13 +148,8 @@ Hooks.on("ready", () => {
           ? getRollTableResult(bioTableStr)
           : getCompendiumTableResult(bioTableStr);
 
-        const token = canvas.tokens.get(tokenData._id);
-        if (!token) {
-          throw new Error("Couldn't find token to update.");
-        }
-
         resultPromise.then((result) => {
-          accessNestedRef(token.actor.data, bioDataPath, result);
+          accessNestedRef(tokenDocument.actor.data, bioDataPath, result);
         });
       }
     } catch (e) {
