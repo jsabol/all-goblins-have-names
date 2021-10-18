@@ -1,4 +1,9 @@
 # All Goblins Have Names
+[![Version (latest)](https://img.shields.io/github/v/release/toastygm/all-goblins-have-names)](https://github.com/toastygm/all-goblins-have-names/releases/latest)
+[![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Fall-goblins-have-names&colorB=4aa94a)](https://forge-vtt.com/bazaar#package=all-goblins-have-names)
+[![GitHub downloads (latest)](https://img.shields.io/badge/dynamic/json?label=Downloads@latest&query=assets[?(@.name.includes('zip'))].download_count&url=https://api.github.com/repos/toastygm/all-goblins-have-names/releases/latest&color=green)](https://github.com/toastygm/all-goblins-have-names/releases/latest)
+
+
 
 A module for Foundry VTT. Allows you to use a table as the Display Name for a token so each new
 token will get a random name. It can also roll random biographies for tokens when used with [Better Rolltables](https://foundryvtt.com/packages/better-rolltables/).
