@@ -19,8 +19,8 @@
   "readme": "README.md",
   "license": "LICENSE",
   "bugs": "https://github.com/toastygm/all-goblins-have-names/issues",
-  "download": "https://github.com/toastygm/all-goblins-have-names/archive/v1.3.0.zip",
-  "manifest": "https://raw.githubusercontent.com/toastygm/all-goblins-have-names/master/module.json",
+  "download": "https://github.com/toastygm/all-goblins-have-names/releases/latest/download/module.zip",
+  "manifest": "https://github.com/toastygm/all-goblins-have-names/releases/latest/download/module.json",
   "flags": {
     "allowBugReporter": true
   }
