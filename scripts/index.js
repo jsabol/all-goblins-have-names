@@ -53,7 +53,7 @@ async function getCompendiumTableResult(displayName) {
   }
 
   // get table
-  const table = await pack.getEntity(idParts[2]);
+  const table = await pack.getDocument(idParts[2]);
 
   if (!table) {
     throw new Error(
@@ -116,8 +116,8 @@ Hooks.on("ready", () => {
   // Creating the token
   Hooks.on("createToken", async (tokenDocument, scene) => {
     // pick up the temporary flags we set in preCreateToken
-    const tokenData = tokenDocument.data
-    prepareTokenFlags(tokenData)
+    const tokenData = tokenDocument.data;
+    prepareTokenFlags(tokenData);
 
     const tableStr = tokenData.flags._AGHN_nameTable;
     const bioTableStr = tokenData.flags._AGHN_bioTable;

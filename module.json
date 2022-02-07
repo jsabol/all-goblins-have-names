@@ -12,8 +12,8 @@
     }
   ],
   "version": "1.3.0",
-  "minimumCoreVersion": "0.8.5",
-  "compatibleCoreVersion": "0.8.9",
+  "minimumCoreVersion": "9.0",
+  "compatibleCoreVersion": "9.249",
   "esmodules": ["scripts/index.js"],
   "url": "https://github.com/toastygm/all-goblins-have-names",
   "readme": "README.md",
