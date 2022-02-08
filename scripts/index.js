@@ -1,13 +1,26 @@
 import { isWorldTable, isCompendiumTable, rollTable } from "./table-utils.js";
 
-function accessNestedRef(obj = {}, str = "", setValue) {
-  const parts = str.split(".");
-  return parts.reduce((o, key, i) => {
-    if (setValue && i == parts.length - 1) {
-      o[key] = setValue;
+// API interface for the module
+class AllGoblinsHaveNames {
+  /**
+   * rerolls the name and bio of all selected tokens
+   */
+  async rerollSelectedTokens() {
+    for (let token of canvas.tokens.controlled) {
+      const result = await getNewRolledValues(token.actor.data.token);
+      saveRolledValues(token.document, result);
     }
-    return o[key];
-  }, obj);
+  }
+
+  /**
+   * takes a string referencing a table  and rolls
+   * @param {string} tableStr (like @Compendium[id]{name})
+   */
+  rollFromTableString(tableStr) {
+    return isWorldTable(tableStr)
+      ? getRollTableResult(tableStr)
+      : getCompendiumTableResult(tableStr);
+  }
 }
 
 /**
@@ -70,90 +83,113 @@ async function getCompendiumTableResult(displayName) {
 }
 
 /**
- * ------------------------------------------------------------------------------
- * Initialize the All Goblins Have NAmes module
+ * Searches for tables in the name field and biogrpahy
+ * @param {TokenData} tokenData
  */
-Hooks.on("ready", () => {
-  function prepareTokenFlags(tokenData) {
-    const displayName = tokenData.name.trim();
-    if (isWorldTable(displayName) || isCompendiumTable(displayName)) {
-      // clear token name so we don't display software gore to the user
-      tokenData.name = " ";
-      // temporarily put it here so we can access it in our async function
-      tokenData.flags._AGHN_nameTable = displayName;
+function mineForTableStrings(tokenData) {
+  const displayName = tokenData.name.trim();
+  let nameTableStr, bioDataPath, bioTableStr;
+  if (isWorldTable(displayName) || isCompendiumTable(displayName)) {
+    nameTableStr = displayName;
+  }
+  // Mine biography for tables
+  const actorId = tokenData.actorId || tokenData.document.id;
+  if (!tokenData.actorLink && actorId) {
+    let actor = game.actors.get(actorId);
+    let actorData = actor.data.data;
+
+    let bio;
+    // structure of simple worldbuilding system
+    if (actorData.biography) {
+      bio = actorData.biography;
+      bioDataPath = "data.biography";
     }
-    // Mine biography for tables
-    if (!tokenData.actorLink && tokenData.actorId) {
-      let actor = game.actors.get(tokenData.actorId);
-      let data = actor.data.data;
+    // structure of D&D 5e NPCs and PCs
+    else if (
+      actorData.details &&
+      actorData.details.biography &&
+      actorData.details.biography.value
+    ) {
+      bio = actorData.details.biography.value;
+      bioDataPath = "data.details.biography.value";
+    }
 
-      let bio;
-      // structure of simple worldbuilding system
-      if (data.biography) {
-        bio = data.biography;
-        tokenData.flags._AGHN_bioDataPath = "data.biography";
-      }
-      // structure of D&D 5e NPCs and PCs
-      else if (
-        data.details &&
-        data.details.biography &&
-        data.details.biography.value
-      ) {
-        bio = data.details.biography.value;
-        tokenData.flags._AGHN_bioDataPath = "data.details.biography.value";
-      }
-
-      // get text out of bio
-      let el = document.createElement("div");
-      el.innerHTML = bio;
-      let bioText = el.innerText.trim();
-      if (isWorldTable(bioText) || isCompendiumTable(bioText)) {
-        tokenData.flags._AGHN_bioTable = bioText;
-      }
+    // get text out of bio
+    let el = document.createElement("div");
+    el.innerHTML = bio;
+    let bioText = el.innerText.trim();
+    if (isWorldTable(bioText) || isCompendiumTable(bioText)) {
+      bioTableStr = bioText;
     }
   }
+  return { nameTableStr, bioDataPath, bioTableStr };
+}
 
-  // Creating the token
-  Hooks.on("createToken", async (tokenDocument, scene) => {
-    // pick up the temporary flags we set in preCreateToken
-    const tokenData = tokenDocument.data;
-    prepareTokenFlags(tokenData);
+/**
+ * Rolls for new values
+ * @param {TokenData} tokenData
+ * @returns {Promise} resolves to an object with name and bio.
+ */
+async function getNewRolledValues(tokenData) {
+  const { nameTableStr, bioTableStr, bioDataPath } =
+    mineForTableStrings(tokenData);
 
-    const tableStr = tokenData.flags._AGHN_nameTable;
-    const bioTableStr = tokenData.flags._AGHN_bioTable;
-    const bioDataPath = tokenData.flags._AGHN_bioDataPath;
-    // bail early if there is nothing relevant here
-    if (!tableStr && !bioTableStr) return;
-    // clean up our temporary storage
-    delete tokenData.flags._AGHN_nameTable;
-    delete tokenData.flags._AGHN_bioTable;
-    delete tokenData.flags._AGHN_bioDataPath;
-
-    try {
-      // name
-      if (tableStr) {
-        let resultPromise = isWorldTable(tableStr)
-          ? getRollTableResult(tableStr)
-          : getCompendiumTableResult(tableStr);
-
-        resultPromise.then((result) => {
-          // token.update will be deprecated in 0.9.
-          tokenDocument.update({ name: result });
-        });
-      }
-
-      // bio
-      if (bioTableStr) {
-        let resultPromise = isWorldTable(bioTableStr)
-          ? getRollTableResult(bioTableStr)
-          : getCompendiumTableResult(bioTableStr);
-
-        resultPromise.then((result) => {
-          accessNestedRef(tokenDocument.actor.data, bioDataPath, result);
-        });
-      }
-    } catch (e) {
-      console.warn("[All Goblins Have Names]: " + e.message);
+  try {
+    let result = { bioDataPath };
+    // name
+    if (nameTableStr) {
+      result.name = await game.allGoblinsHaveNames.rollFromTableString(
+        nameTableStr
+      );
     }
+
+    // bio
+    if (bioTableStr) {
+      result.bio = await game.allGoblinsHaveNames.rollFromTableString(
+        bioTableStr
+      );
+    }
+
+    return result;
+  } catch (e) {
+    console.warn("[All Goblins Have Names]: " + e.message);
+  }
+}
+
+/**
+ * Saves the result from getNewRolledValues to the token
+ * @param {TokenDocument} tokenDocument
+ * @param {object} result
+ */
+function saveRolledValues(tokenDocument, result) {
+  // do the update
+  tokenDocument.update({
+    name: result.name,
+  });
+  tokenDocument.actor.update({ [result.bioDataPath]: result.bio });
+}
+
+/**
+ * ------------------------------------------------------------------------------
+ * Initialize the All Goblins Have Names module
+ */
+
+Hooks.once("init", () => {
+  game.allGoblinsHaveNames = new AllGoblinsHaveNames();
+});
+
+Hooks.on("ready", () => {
+  /**
+   * @param {TokenDocument} tokenDocument
+   */
+  Hooks.on("createToken", async (tokenDocument) => {
+    // make a copy of the token data
+    const cloneData = { ...tokenDocument.data };
+
+    // clear token name so we don't display software gore to the user
+    tokenDocument.data.name = " ";
+
+    const result = await getNewRolledValues(cloneData);
+    saveRolledValues(tokenDocument, result);
   });
 });
