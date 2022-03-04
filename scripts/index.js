@@ -130,10 +130,7 @@ function mineForTableStrings(tokenData) {
  * @param {TokenData} tokenData
  * @returns {Promise} resolves to an object with name and bio.
  */
-async function getNewRolledValues(tokenData) {
-  const { nameTableStr, bioTableStr, bioDataPath } =
-    mineForTableStrings(tokenData);
-
+async function getNewRolledValues({ nameTableStr, bioTableStr, bioDataPath }) {
   try {
     let result = { bioDataPath };
     // name
@@ -175,6 +172,7 @@ function saveRolledValues(tokenDocument, result) {
  */
 
 Hooks.once("init", () => {
+  // add the API
   game.allGoblinsHaveNames = new AllGoblinsHaveNames();
 });
 
@@ -183,13 +181,19 @@ Hooks.on("ready", () => {
    * @param {TokenDocument} tokenDocument
    */
   Hooks.on("createToken", async (tokenDocument) => {
-    // make a copy of the token data
-    const cloneData = { ...tokenDocument.data };
+    const toRoll = mineForTableStrings(tokenDocument.data);
 
-    // clear token name so we don't display software gore to the user
+    // bail if there is no table strings to roll on
+    if (!toRoll.nameTableStr && !toRoll.bioTableStr) {
+      return;
+    }
+
+    // clear token name so we don't display software gore to the user while async is running
     tokenDocument.data.name = " ";
 
-    const result = await getNewRolledValues(cloneData);
+    // do the roll
+    const result = await getNewRolledValues(toRoll);
+
     saveRolledValues(tokenDocument, result);
   });
 });
