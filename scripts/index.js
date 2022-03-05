@@ -17,6 +17,10 @@ class AllGoblinsHaveNames {
    * @param {string} tableStr (like @Compendium[id]{name})
    */
   rollFromTableString(tableStr) {
+    // not a valid table string, just return the input
+    if (!isWorldTable(tableStr) && !isCompendiumTable(tableStr)) {
+      return tableStr;
+    }
     return isWorldTable(tableStr)
       ? getRollTableResult(tableStr)
       : getCompendiumTableResult(tableStr);
