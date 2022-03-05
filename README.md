@@ -30,6 +30,13 @@ If you install the module [Better Rolltables](https://foundryvtt.com/packages/be
 
 Note: This will only work for tokens with "Link Actor Data" unchecked.
 
+## API
+
+This module provides a few methods under the `game.allGoblinsHaveNames` namespace for use in macros or other modules.
+
+- `game.allGoblinsHaveNames.rerollSelectedTokens()` - Re-rolls the names of all selected tokens.
+- `game.allGoblinsHaveNames.rollFromTableString(tableStr)` - Takes a string like `@RollTable[...` or `@Compendium[...` and returns a random result from that table.
+
 ## Installation
 
 You can install this module through the Foundry module UI
