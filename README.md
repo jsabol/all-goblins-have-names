@@ -23,12 +23,7 @@ When multiple lines are returned from a table, the lines will be joined together
 
 ## Random biographies with Better Rolltables
 
-If you install the module [Better Rolltables](https://foundryvtt.com/packages/better-rolltables/), you can also generate random biographies. Create a Story Table, then place a reference to it as the first line of the biography. For example, you can use the Random NPC Story Table that comes with the BetterTables mod: `@Compendium[better-rolltables.brt-story.8vjHa6SoZibxeTke]{Random NPC}`. This currently supports the Simple Worldbuilding system, D&D 5e, HarnMaster, or any system with the data formats of...
-
-- `actor.data.data.biography` (Simple Worldbuilding)
-- `actor.data.data.details.biography.value` (D&D 5e)
-
-Note: This will only work for tokens with "Link Actor Data" unchecked.
+Story tables are currently bugged in Better Rolltables. When this changes, we will update this README with instructions on how to randomize biographies.
 
 ## API
 
