@@ -1,7 +1,7 @@
 # All Goblins Have Names
-[![Version (latest)](https://img.shields.io/github/v/release/toastygm/all-goblins-have-names)](https://github.com/toastygm/all-goblins-have-names/releases/latest)
+[![Version (latest)](https://img.shields.io/github/v/release/jsabol/all-goblins-have-names)](https://github.com/jsabol/all-goblins-have-names/releases/latest)
 [![Forge Installs](https://img.shields.io/badge/dynamic/json?label=Forge%20Installs&query=package.installs&suffix=%25&url=https%3A%2F%2Fforge-vtt.com%2Fapi%2Fbazaar%2Fpackage%2Fall-goblins-have-names&colorB=4aa94a)](https://forge-vtt.com/bazaar#package=all-goblins-have-names)
-[![GitHub downloads (latest)](https://img.shields.io/badge/dynamic/json?label=Downloads@latest&query=assets[?(@.name.includes('zip'))].download_count&url=https://api.github.com/repos/toastygm/all-goblins-have-names/releases/latest&color=green)](https://github.com/toastygm/all-goblins-have-names/releases/latest)
+[![GitHub downloads (latest)](https://img.shields.io/badge/dynamic/json?label=Downloads@latest&query=assets[?(@.name.includes('zip'))].download_count&url=https://api.github.com/repos/jsabol/all-goblins-have-names/releases/latest&color=green)](https://github.com/jsabol/all-goblins-have-names/releases/latest)
 
 
 
@@ -36,5 +36,5 @@ You can install this module through the Foundry module UI
 
 ## Get help
 
-You can [file an issue](https://github.com/toastygm/all-goblins-have-names/issues/new) on github if
-you're running into a bug or reach me on the Foundry VTT discord as toasty#8538.
+You can [file an issue](https://github.com/jsabol/all-goblins-have-names/issues/new) on github if
+you're running into a bug or reach me on the Foundry VTT discord as Cattegy#7436.
