@@ -1,16 +1,16 @@
 export function isBetterTable(table) {
   return (
-    table.data.flags &&
-    table.data.flags["better-rolltables"] &&
-    table.data.flags["better-rolltables"]["table-type"] == "better"
+    table.flags &&
+    table.flags["better-rolltables"] &&
+    table.flags["better-rolltables"]["table-type"] == "better"
   );
 }
 
 export function isStoryTable(table) {
   return (
-    table.data.flags &&
-    table.data.flags["better-rolltables"] &&
-    table.data.flags["better-rolltables"]["table-type"] == "story"
+    table.flags &&
+    table.flags["better-rolltables"] &&
+    table.flags["better-rolltables"]["table-type"] == "story"
   );
 }
 
