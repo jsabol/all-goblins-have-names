@@ -164,10 +164,12 @@ async function getNewRolledValues({ nameTableStr, bioTableStr, bioDataPath }) {
  */
 function saveRolledValues(tokenDocument, result) {
   // do the update
-  tokenDocument.update({
-    name: result.name,
-  });
-  tokenDocument.actor.update({ [result.bioDataPath]: result.bio });
+  if (game.user.isGM) {
+    tokenDocument.update({
+      name: result.name,
+    });
+    tokenDocument.actor.update({ [result.bioDataPath]: result.bio });
+  }  
 }
 
 /**
