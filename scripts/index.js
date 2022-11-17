@@ -7,7 +7,7 @@ class AllGoblinsHaveNames {
    */
   async rerollSelectedTokens() {
     for (let token of canvas.tokens.controlled) {
-      const result = await getNewRolledValues(token.actor.data.token);
+      const result = await getNewRolledValues(token.actor.prototypeToken);
       saveRolledValues(token.document, result);
     }
   }
@@ -35,8 +35,8 @@ class AllGoblinsHaveNames {
 async function getRollTableResult(displayName) {
   // get the table by its ID
   const endIndex = displayName.indexOf("]");
-  const table_id = displayName.substring(11, endIndex);
-  const table = game.tables.contents.find((t) => t.data._id == table_id);
+  const table_id = displayName.substring(16, endIndex);
+  const table = game.tables.contents.find((t) => t._id == table_id);
 
   if (table) {
     return await rollTable(table);
@@ -97,10 +97,10 @@ function mineForTableStrings(tokenData) {
     nameTableStr = displayName;
   }
   // Mine biography for tables
-  const actorId = tokenData.actorId || tokenData.document.id;
+  const actorId = tokenData.actorId || tokenData.id;
   if (!tokenData.actorLink && actorId) {
     let actor = game.actors.get(actorId);
-    let actorData = actor.data.data;
+    let actorData = actor.system;
 
     let bio;
     // structure of simple worldbuilding system
@@ -164,10 +164,12 @@ async function getNewRolledValues({ nameTableStr, bioTableStr, bioDataPath }) {
  */
 function saveRolledValues(tokenDocument, result) {
   // do the update
-  tokenDocument.update({
-    name: result.name,
-  });
-  tokenDocument.actor.update({ [result.bioDataPath]: result.bio });
+  if (game.user.isGM) {
+    tokenDocument.update({
+      name: result.name,
+    });
+    tokenDocument.actor.update({ [result.bioDataPath]: result.bio });
+  }  
 }
 
 /**
@@ -185,7 +187,7 @@ Hooks.on("ready", () => {
    * @param {TokenDocument} tokenDocument
    */
   Hooks.on("createToken", async (tokenDocument) => {
-    const toRoll = mineForTableStrings(tokenDocument.data);
+    const toRoll = mineForTableStrings(tokenDocument);
 
     // bail if there is no table strings to roll on
     if (!toRoll.nameTableStr && !toRoll.bioTableStr) {
@@ -193,7 +195,7 @@ Hooks.on("ready", () => {
     }
 
     // clear token name so we don't display software gore to the user while async is running
-    tokenDocument.data.name = " ";
+    tokenDocument.name = " ";
 
     // do the roll
     const result = await getNewRolledValues(toRoll);

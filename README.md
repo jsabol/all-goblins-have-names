@@ -11,8 +11,8 @@ token will get a random name. It can also roll random biographies for tokens whe
 ## How to use it
 
 First, grab your random name table and drag it into a Journal entry. That will give you some
-text that looks similar to `@RollTable[2cbm3cP46dxcxO5Z]{Dwarf Female Name}`. Now, open the Actor
-and click Prototype Token. Paste your `@RollTable[...` text into the Token Name. When you drag your Actor
+text that looks similar to `@UUID[RollTable.wwn7Qm9oXqZPodsX]{Dwarf Female Name}`. Now, open the Actor
+and click Prototype Token. Paste your `@UUID[RollTable...` text into the Token Name. When you drag your Actor
 onto the map to create a new Token, its name will be randomized!
 
 ### Return more than one result for firstname + lastname
@@ -30,7 +30,7 @@ Story tables are currently bugged in Better Rolltables. When this changes, we wi
 This module provides a few methods under the `game.allGoblinsHaveNames` namespace for use in macros or other modules.
 
 - `game.allGoblinsHaveNames.rerollSelectedTokens()` - Re-rolls the names of all selected tokens.
-- `game.allGoblinsHaveNames.rollFromTableString(tableStr)` - Takes a string like `@RollTable[...` or `@Compendium[...` and returns a random result from that table.
+- `game.allGoblinsHaveNames.rollFromTableString(tableStr)` - Takes a string like `@UUID[RollTable...` or `@UUID[Compendium...` and returns a random result from that table.
 
 ## Installation
 

@@ -6,11 +6,11 @@ import {
 } from "./better-table-util.js";
 
 export function isWorldTable(str) {
-  return str.startsWith("@RollTable[");
+  return str.startsWith("@UUID[RollTable.");
 }
 
 export function isCompendiumTable(str) {
-  return str.startsWith("@Compendium[");
+  return str.startsWith("@UUID[Compendium.");
 }
 
 export async function rollTable(table) {
@@ -29,5 +29,5 @@ export async function rollTable(table) {
  * @param {Array.<object>} results
  */
 function joinResults(results) {
-  return results.map((r) => r.data.text).join(" ");
+  return results.map((r) => r.text).join(" ");
 }
