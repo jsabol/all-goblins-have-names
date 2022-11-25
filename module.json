@@ -1,5 +1,5 @@
 {
-  "name": "all-goblins-have-names",
+  "id": "all-goblins-have-names",
   "title": "All Goblins Have Names",
   "description": "Use a table as the display name for a token. New tokens get a random name.",
   "authors": [
